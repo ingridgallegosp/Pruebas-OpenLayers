@@ -9,6 +9,7 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {fromLonLat} from 'ol/proj.js';
 import OSM from 'ol/source/OSM';
 import XYZ from 'ol/source/XYZ';
+import Overlay from 'ol/Overlay.js';
 //import TileJSON from 'ol/source/TileJSON';
 
 
@@ -82,7 +83,7 @@ const rasterLayer = new TileLayer({
     })
       
 });
-
+//--------------mapa was here
 //Crear mapa
 const map = new Map({
   layers: [rasterLayer, vectorLayer],
@@ -95,21 +96,44 @@ const map = new Map({
   }),
 });
 
-//Overlay usado para desplear en popup con info adicional del marcador
+//Overlay usado para desplegar popup con info del marcador
+
+ const overlayContainerElement = document.querySelector('.overlay-container')
+
+const overlayLayer = new Overlay({
+  element:overlayContainerElement,
+  //necesitamos ubicar la posicion, pero esta va a hacerse sobre cada punto que se haga click
+})
+
+//map.addLayer(overlayLayer);
+
+
+const overlayFeatureName = document.getElementById('feature-name')
+const overlayFeatureInfo = document.getElementById('feature-additional-info')
+ 
 
 //Obtener info del marcador (feature)
 map.on('click', function(e){
   //for each feature at pixel nos da el dato de cada marcador declarado
   map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
-    //console.log(feature) //click sobre marcador
-    //console.log(feature.getKeys()) //obtener data disponible del feature
-    let clickedFeatureCoordinate = e.coordinate;
-    console.log(clickedFeatureCoordinate)
+    //console.log(feature)
+    //console.log(feature.getKeys()) //obtener data disponible del feature  //click sobre marcador
+    
+    //Obtenemos la coordenada del marcador clickeado
+    let clickedCoordinate = e.coordinate;
+    console.log(clickedCoordinate)
     //let clickedFeatureGeometry = feature.get('geometry');
     //console.log(clickedFeatureGeometry.flatCoordinates)
+
+    //Obtenemos datos del marcador(Feature) 
     let clickedFeatureName = feature.get('name');
     let clickedFeatureAdditionalInfo = feature.get('additionalInfo');
     console.log(clickedFeatureName, clickedFeatureAdditionalInfo)
+
+    //Especificamos la posicion
+    overlayLayer.setPosition(clickedCoordinate)
   })
 })
+
+map.addOverlay(overlayLayer);
 
