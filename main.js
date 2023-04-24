@@ -28,9 +28,14 @@ import XYZ from 'ol/source/XYZ';
 //Crear marcadores
 const marcador = new Feature({
   geometry: new Point(fromLonLat([-78.4866264, -0.1535451])),// En dónde se va a ubicar
+  name: 'Quito',
+  additionalInfo:'Capital de Ecuador'
 });
 const marcador2 = new Feature({
   geometry: new Point(fromLonLat([116.390903, 39.904835])),// En dónde se va a ubicar
+  name:'Beijing',
+  additionalInfo:'Capital de China'
+
 });
 //console.log(marcador)
 
@@ -88,4 +93,23 @@ const map = new Map({
     //zoom:3,
     zoom: 12,
   }),
-}); 
+});
+
+//Overlay usado para desplear en popup con info adicional del marcador
+
+//Obtener info del marcador (feature)
+map.on('click', function(e){
+  //for each feature at pixel nos da el dato de cada marcador declarado
+  map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
+    //console.log(feature) //click sobre marcador
+    //console.log(feature.getKeys()) //obtener data disponible del feature
+    let clickedFeatureCoordinate = e.coordinate;
+    console.log(clickedFeatureCoordinate)
+    //let clickedFeatureGeometry = feature.get('geometry');
+    //console.log(clickedFeatureGeometry.flatCoordinates)
+    let clickedFeatureName = feature.get('name');
+    let clickedFeatureAdditionalInfo = feature.get('additionalInfo');
+    console.log(clickedFeatureName, clickedFeatureAdditionalInfo)
+  })
+})
+
