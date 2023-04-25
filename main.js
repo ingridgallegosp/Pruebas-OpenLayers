@@ -98,19 +98,22 @@ const map = new Map({
 
 //Overlay usado para desplegar popup con info del marcador
 
- const overlayContainerElement = document.querySelector('.overlay-container')
+/* const popup = new Overlay({
+  element: document.getElementById('popup'),
+});
+popup.setPosition([116.390903, 39.904835]);
+//popup.setPosition(coordinate);
+map.addOverlay(popup); */ 
+
+//const overlayContainerElement = document.getElementById('overlay-container')
 
 const overlayLayer = new Overlay({
-  element:overlayContainerElement,
+  //element:overlayContainerElement,
+  element: document.getElementById('overlay-container')
   //necesitamos ubicar la posicion, pero esta va a hacerse sobre cada punto que se haga click
 })
 
-//map.addLayer(overlayLayer);
 
-
-const overlayFeatureName = document.getElementById('feature-name')
-const overlayFeatureInfo = document.getElementById('feature-additional-info')
- 
 
 //Obtener info del marcador (feature)
 map.on('click', function(e){
@@ -126,14 +129,18 @@ map.on('click', function(e){
     //console.log(clickedFeatureGeometry.flatCoordinates)
 
     //Obtenemos datos del marcador(Feature) 
-    let clickedFeatureName = feature.get('name');
-    let clickedFeatureAdditionalInfo = feature.get('additionalInfo');
+    const clickedFeatureName = feature.get('name');
+    const clickedFeatureAdditionalInfo = feature.get('additionalInfo');
     console.log(clickedFeatureName, clickedFeatureAdditionalInfo)
-
-    //Especificamos la posicion
-    overlayLayer.setPosition(clickedCoordinate)
+    
+        //Especificamos la posicion
+    overlayLayer.setPosition(clickedCoordinate);
+    //Datos que va a mostrar
+    const overlayFeatureName = document.getElementById('feature-name')
+    const overlayFeatureInfo = document.getElementById('feature-additional-info')
+    overlayFeatureName.innerHTML = clickedFeatureName;
+    overlayFeatureInfo.innerHTML = clickedFeatureAdditionalInfo
+   
   })
 })
-
 map.addOverlay(overlayLayer);
-
