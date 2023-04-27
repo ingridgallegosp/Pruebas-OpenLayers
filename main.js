@@ -97,22 +97,18 @@ const map = new Map({
 });
 
 //Overlay usado para desplegar popup con info del marcador
-
-/* const popup = new Overlay({
-  element: document.getElementById('popup'),
-});
-popup.setPosition([116.390903, 39.904835]);
-//popup.setPosition(coordinate);
-map.addOverlay(popup); */ 
-
 const overlayContainerElement = document.getElementById('overlay-container')
-
 const overlayLayer = new Overlay({
   element:overlayContainerElement,
   //element: document.getElementById('overlay-container')
   //necesitamos ubicar la posicion, pero esta va a hacerse sobre cada punto que se haga click
 })
-
+const closer = document.getElementById('popup-closer');
+/* closer.onclick = function () {
+    overlay.setPosition(undefined);
+    closer.blur();
+    return false;
+} */
 //Obtener info del marcador (feature)
 map.on('click', function(e){
   //for each feature at pixel nos da el dato de cada marcador declarado
