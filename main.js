@@ -105,15 +105,13 @@ popup.setPosition([116.390903, 39.904835]);
 //popup.setPosition(coordinate);
 map.addOverlay(popup); */ 
 
-//const overlayContainerElement = document.getElementById('overlay-container')
+const overlayContainerElement = document.getElementById('overlay-container')
 
 const overlayLayer = new Overlay({
-  //element:overlayContainerElement,
-  element: document.getElementById('overlay-container')
+  element:overlayContainerElement,
+  //element: document.getElementById('overlay-container')
   //necesitamos ubicar la posicion, pero esta va a hacerse sobre cada punto que se haga click
 })
-
-
 
 //Obtener info del marcador (feature)
 map.on('click', function(e){
@@ -133,7 +131,7 @@ map.on('click', function(e){
     const clickedFeatureAdditionalInfo = feature.get('additionalInfo');
     console.log(clickedFeatureName, clickedFeatureAdditionalInfo)
     
-        //Especificamos la posicion
+    //Especificamos la posicion
     overlayLayer.setPosition(clickedCoordinate);
     //Datos que va a mostrar
     const overlayFeatureName = document.getElementById('feature-name')
