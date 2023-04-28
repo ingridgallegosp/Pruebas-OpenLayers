@@ -25,6 +25,7 @@ body .container{
     width: 90%;
 }
 
+
 body .container .contenedor-mapa{
     height: 100%;
     width: 100%;
@@ -34,7 +35,7 @@ body .container .contenedor-mapa #map {
     width: 100%;
     height: 100%;
 }
-
+body .container #popup,
 body .overlay-container{
     height: 5rem;
     width: 15rem;
