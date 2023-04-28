@@ -4,27 +4,15 @@ import Map from 'ol/Map.js';
 import Point from 'ol/geom/Point.js';
 import VectorSource from 'ol/source/Vector.js';
 import View from 'ol/View.js';
-import {Icon, Style} from 'ol/style.js';
-import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
-import {fromLonLat} from 'ol/proj.js';
+import { Icon, Style } from 'ol/style.js';
+import { Tile as TileLayer, Vector as VectorLayer } from 'ol/layer.js';
+import { fromLonLat, toLonLat } from 'ol/proj.js';
 import OSM from 'ol/source/OSM';
 import XYZ from 'ol/source/XYZ';
 import Overlay from 'ol/Overlay.js';
 //import TileJSON from 'ol/source/TileJSON';
+import { toStringHDMS } from 'ol/coordinate.js';
 
-
-/* const map = new Map({
-  target: 'map',
-  layers: [
-    new TileLayer({
-      source: new OSM()
-    })
-  ],
-  view: new View({
-    center: [0, 0],
-    zoom: 2
-  })
-}); */
  
 //Crear marcadores
 const marcador = new Feature({
@@ -83,7 +71,7 @@ const rasterLayer = new TileLayer({
     })
       
 });
-//--------------mapa was here
+
 //Crear mapa
 const map = new Map({
   layers: [rasterLayer, vectorLayer],
@@ -92,7 +80,9 @@ const map = new Map({
     //center: fromLonLat([0,0]),
     center: fromLonLat([116.390903, 39.904835]),
     //zoom:3,
-    zoom: 12,
+      zoom: 12,
+      //minZoom:2,
+      //maxZoom:12
   }),
 });
 
@@ -103,12 +93,7 @@ const overlayLayer = new Overlay({
   //element: document.getElementById('overlay-container')
   //necesitamos ubicar la posicion, pero esta va a hacerse sobre cada punto que se haga click
 })
-const closer = document.getElementById('popup-closer');
-/* closer.onclick = function () {
-    overlay.setPosition(undefined);
-    closer.blur();
-    return false;
-} */
+
 //Obtener info del marcador (feature)
 map.on('click', function(e){
   //for each feature at pixel nos da el dato de cada marcador declarado
@@ -136,5 +121,32 @@ map.on('click', function(e){
     overlayFeatureInfo.innerHTML = clickedFeatureAdditionalInfo
    
   })
+    
 })
 map.addOverlay(overlayLayer);
+
+// Cerrar el boton del popup
+const closer = document.getElementById('popup-closer');
+closer.onclick = function () {
+    overlayLayer.setPosition(undefined);
+    closer.blur();
+    return false;
+};
+
+// Popup mostrando la posicion clickeada
+const popup = new Overlay({
+    element: document.getElementById('popup'),
+  });
+  map.addOverlay(popup);
+  
+  const element = popup.getElement();
+map.on('click', function (evt) {
+    //console.log(evt)
+    const coordinate = evt.coordinate;
+    //console.log(coordinate)
+    const hdms = toStringHDMS(toLonLat(coordinate));
+    popup.setPosition(coordinate);
+    
+    const popupInfo = document.getElementById('popup-info')
+    popupInfo.innerHTML = "hiciste click en: "+ hdms;
+  });
