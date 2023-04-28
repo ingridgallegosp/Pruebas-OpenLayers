@@ -24,8 +24,12 @@ const marcador2 = new Feature({
   geometry: new Point(fromLonLat([116.390903, 39.904835])),// En dónde se va a ubicar
   name:'Beijing',
   additionalInfo:'Capital de China'
-
 });
+const marcador3 = new Feature({
+    geometry: new Point(fromLonLat([116.4401378, 39.9178233])),// En dónde se va a ubicar
+    name:'China Life Tower',
+    additionalInfo:'Edificio en Beijing'
+  });
 //console.log(marcador)
 
 // Agregamos icono
@@ -47,11 +51,22 @@ marcador2.setStyle(
     })
   })
 );
+marcador3.setStyle(
+    new Style({
+      image: new Icon({
+          color: '#BADA55',
+          crossOrigin: 'anonymous',
+          src: "./location.png",
+          scale: 0.1,
+      })
+    })
+  );
+  
 
 // marcadores debe ser un arreglo
 // Agregamos el marcador al arreglo
 const vectorSource = new VectorSource({
-  features: [marcador, marcador2], // A la capa le ponemos los marcadores
+  features: [marcador, marcador2, marcador3], // A la capa le ponemos los marcadores
 });
 
 // Layer marcadores
@@ -81,6 +96,7 @@ const map = new Map({
     center: fromLonLat([116.390903, 39.904835]),
     //zoom:3,
       zoom: 12,
+      //se Manipula lo min y max a mostrar
       //minZoom:2,
       //maxZoom:12
   }),
@@ -119,7 +135,6 @@ map.on('click', function(e){
     const overlayFeatureInfo = document.getElementById('feature-additional-info')
     overlayFeatureName.innerHTML = clickedFeatureName;
     overlayFeatureInfo.innerHTML = clickedFeatureAdditionalInfo
-   
   })
     
 })
@@ -143,7 +158,7 @@ const popup = new Overlay({
 map.on('click', function (evt) {
     //console.log(evt)
     const coordinate = evt.coordinate;
-    //console.log(coordinate)
+    console.log(coordinate)
     const hdms = toStringHDMS(toLonLat(coordinate));
     popup.setPosition(coordinate);
     
